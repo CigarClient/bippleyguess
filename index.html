@@ -100,6 +100,7 @@
                     audioPlayer.pause();
                     songSelect.disabled = false;
                     resultElement.textContent = "You heard a " + modeLabel + " clip. Now, guess the song!";
+                    audioPlayer.style.display = 'none';  // Hide the audio player after playing the clip
                 }
             });
         });
@@ -116,10 +117,7 @@
     }
 
     function resetGame() {
-        resultElement.textContent = "";
-        songSelect.value = "";
-        modeSelect.value = "0.2";
-        selectedClip = null;
+        location.reload();  // Reload the entire page
     }
 </script>
 
