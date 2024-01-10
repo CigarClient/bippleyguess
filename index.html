@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Song</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        audio {
+            margin-top: 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Guess the Song</h1>
+<p>Listen to a random 2-second clip and guess the song!</p>
+
+<select id="songSelect" disabled>
+    <option value="" disabled selected>Please choose a song</option>
+    <option value="baltimore.mp3">Baltimore Anthem</option>
+    <option value="kodak.mp3">Kodakyangg</option>
+    <option value="99.mp3">99' Bippleyootz</option>
+    <option value="fuckalyootz.mp3">Put It on Duh Fuckalyootz</option>
+    <option value="tippalyangin.mp3">Still Tippalyangin</option>
+    <option value="wrongs.mp3">Wrongs</option>
+</select>
+
+<button onclick="playRandomClip()">Play Random Clip</button>
+<button onclick="submitGuess()">Submit Guess</button>
+
+<audio id="audioPlayer" controls>
+    Your browser does not support the audio element.
+</audio>
+
+<p id="result"></p>
+
+<script>
+    var audioPlayer = document.getElementById('audioPlayer');
+    var resultElement = document.getElementById('result');
+    var songSelect = document.getElementById('songSelect');
+    var selectedClip = null;
+
+    function playRandomClip() {
+        songSelect.disabled = true;
+
+        var songs = [
+            "baltimore.mp3",
+            "kodak.mp3",
+            "99.mp3",
+            "fuckalyootz.mp3",
+            "tippalyangin.mp3",
+            "wrongs.mp3"
+        ];
+
+        selectedClip = songs[Math.floor(Math.random() * songs.length)];
+
+        audioPlayer.src = selectedClip;
+
+        audioPlayer.addEventListener('loadedmetadata', function() {
+            var duration = audioPlayer.duration;
+            var randomStartTime = Math.random() * (duration - 2); // Play a 2-second clip from a random start time
+
+            audioPlayer.currentTime = randomStartTime;
+            audioPlayer.volume = 0.5; // Set volume to half
+            audioPlayer.play();
+
+            audioPlayer.addEventListener('timeupdate', function() {
+                if (audioPlayer.currentTime > randomStartTime + 2) {
+                    audioPlayer.pause();
+                    songSelect.disabled = false;
+                    resultElement.textContent = "You heard a random clip. Now, guess the song!";
+                }
+            });
+        });
+    }
+
+    function submitGuess() {
+        var userGuess = songSelect.value;
+
+        if (userGuess === selectedClip) {
+            resultElement.textContent = "Congratulations! Your guess is correct.";
+        } else {
+            resultElement.textContent = "Oops! Your guess is incorrect. Try again.";
+        }
+    }
+</script>
+
+</body>
+</html>
