@@ -9,6 +9,14 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .dark-mode body {
+            background-color: #333;
+            color: #fff;
         }
 
         audio {
@@ -29,12 +37,23 @@
             display:block;
             width:100%;
         }
+
+        #darkModeToggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .dark-mode #darkModeToggle {
+            filter: invert(1);
+        }
     </style>
 </head>
 <body>
 
 <h1>Bippley Guessing</h1>
-<p>yeah</p>
+<p id="subtitle">yeah</p>
 
 <select id="modeSelect">
     <option value="0.2">Extreme</option>
@@ -63,11 +82,18 @@
 
 <p id="result"></p>
 
+<div id="darkModeToggle" onclick="toggleDarkMode()">
+    <img src="assets/dark-mode-icon.png" alt="Dark Mode Icon">
+</div>
+
 <script>
     var audioPlayer = document.getElementById('audioPlayer');
     var resultElement = document.getElementById('result');
+    var subtitleElement = document.getElementById('subtitle');
     var modeSelect = document.getElementById('modeSelect');
     var songSelect = document.getElementById('songSelect');
+    var darkModeToggle = document.getElementById('darkModeToggle');
+    var isDarkMode = false;
     var selectedClip = null;
 
     function playRandomClip() {
@@ -84,18 +110,12 @@
         var modeValue = modeSelect.value;
         var modeLabel = modes[modeValue];
 
-        var songs = [
-            "baltimore.mp3",
-            "kodak.mp3",
-            "99.mp3",
-            "fuckalyootz.mp3",
-            "tippalyangin.mp3",
-            "wrongs.mp3"
-        ];
+        // Hardcoded list of songs
+        var songs = ["baltimore.mp3", "kodak.mp3", "99.mp3", "fuckalyootz.mp3", "tippalyangin.mp3", "wrongs.mp3"];
 
         selectedClip = songs[Math.floor(Math.random() * songs.length)];
 
-        audioPlayer.src = selectedClip;
+        audioPlayer.src = "songs/" + selectedClip;
         audioPlayer.currentTime = 0;  // Reset the playback time
 
         audioPlayer.addEventListener('loadedmetadata', function() {
@@ -103,12 +123,14 @@
             var randomStartTime = Math.random() * (audioPlayer.duration - clipDuration);
 
             audioPlayer.currentTime = randomStartTime;
-            resultElement.textContent = "now guess";
+            subtitleElement.textContent = "now guess";
+            resultElement.textContent = "You heard a " + modeLabel + " clip.";
             audioPlayer.style.display = 'block';  // Display the audio player
 
             audioPlayer.play().then(function() {
                 setTimeout(function() {
                     audioPlayer.pause();
+                    subtitleElement.textContent = "yeah";
                     songSelect.disabled = false;
                 }, clipDuration * 1000);  // Pause after the clip duration
             }).catch(function(error) {
@@ -125,6 +147,26 @@
         } else {
             resultElement.textContent = "Oops! Your guess is incorrect. Try again.";
         }
+    }
+
+    function toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        updateDarkMode();
+    }
+
+    function updateDarkMode() {
+        document.body.classList.toggle("dark-mode", isDarkMode);
+        updateStyles();
+    }
+
+    function updateStyles() {
+        var backgroundColor = isDarkMode ? "#000" : "#fff";
+        var textColor = isDarkMode ? "#fff" : "#000";
+
+        document.body.style.backgroundColor = backgroundColor;
+        document.body.style.color = textColor;
+
+        darkModeToggle.style.filter = isDarkMode ? "invert(1)" : "none";
     }
 </script>
 
