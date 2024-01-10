@@ -19,6 +19,16 @@
             margin-top: 20px;
             font-weight: bold;
         }
+
+        /* Hide timeline and controls */
+        audio::-webkit-media-controls {
+            display:none !important;
+        }
+
+        audio {
+            display:block;
+            width:100%;
+        }
     </style>
 </head>
 <body>
@@ -48,7 +58,7 @@
 <button onclick="submitGuess()">Submit Guess</button>
 <button onclick="resetGame()">Reset Game</button>
 
-<audio id="audioPlayer" controls>
+<audio id="audioPlayer">
     Your browser does not support the audio element.
 </audio>
 
@@ -96,15 +106,11 @@
             resultElement.textContent = "You heard a " + modeLabel + " clip. Now, guess the song!";
             audioPlayer.style.display = 'block';  // Display the audio player
 
-            // Lock the playback controls during the clip
-            audioPlayer.controls = false;
-
             audioPlayer.play();
 
             audioPlayer.addEventListener('timeupdate', function() {
                 if (audioPlayer.currentTime > randomStartTime + clipDuration) {
                     audioPlayer.pause();
-                    audioPlayer.controls = true;  // Restore the playback controls
                     songSelect.disabled = false;
                 }
             });
