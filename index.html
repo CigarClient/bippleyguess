@@ -38,6 +38,7 @@
 
 <button onclick="playRandomClip()">Play Random Clip</button>
 <button onclick="submitGuess()">Submit Guess</button>
+<button onclick="resetGame()">Reset Game</button>
 
 <audio id="audioPlayer" controls>
     Your browser does not support the audio element.
@@ -72,7 +73,6 @@
             var randomStartTime = Math.random() * (duration - 2); // Play a 2-second clip from a random start time
 
             audioPlayer.currentTime = randomStartTime;
-            audioPlayer.volume = 0.5; // Set volume to half
             audioPlayer.play();
 
             audioPlayer.addEventListener('timeupdate', function() {
@@ -93,6 +93,12 @@
         } else {
             resultElement.textContent = "Oops! Your guess is incorrect. Try again.";
         }
+    }
+
+    function resetGame() {
+        resultElement.textContent = "";
+        songSelect.value = "";
+        selectedClip = null;
     }
 </script>
 
