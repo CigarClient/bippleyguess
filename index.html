@@ -23,7 +23,7 @@
 </head>
 <body>
 
-<h1>Guess the Song</h1>
+<h1>Bippley Guessing</h1>
 <p>Listen to a random clip and guess the song!</p>
 
 <select id="modeSelect">
@@ -95,7 +95,19 @@
             audioPlayer.currentTime = randomStartTime;
             resultElement.textContent = "You heard a " + modeLabel + " clip. Now, guess the song!";
             audioPlayer.style.display = 'block';  // Display the audio player
+
+            // Lock the playback controls during the clip
+            audioPlayer.controls = false;
+
             audioPlayer.play();
+
+            audioPlayer.addEventListener('timeupdate', function() {
+                if (audioPlayer.currentTime > randomStartTime + clipDuration) {
+                    audioPlayer.pause();
+                    audioPlayer.controls = true;  // Restore the playback controls
+                    songSelect.disabled = false;
+                }
+            });
         });
     }
 
