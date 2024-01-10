@@ -34,7 +34,7 @@
 <body>
 
 <h1>Bippley Guessing</h1>
-<p>Listen to a random clip and guess the song!</p>
+<p>yeah</p>
 
 <select id="modeSelect">
     <option value="0.2">Extreme</option>
@@ -56,7 +56,6 @@
 
 <button onclick="playRandomClip()">Play Random Clip</button>
 <button onclick="submitGuess()">Submit Guess</button>
-<button onclick="resetGame()">Reset Game</button>
 
 <audio id="audioPlayer">
     Your browser does not support the audio element.
@@ -97,22 +96,23 @@
         selectedClip = songs[Math.floor(Math.random() * songs.length)];
 
         audioPlayer.src = selectedClip;
+        audioPlayer.currentTime = 0;  // Reset the playback time
 
         audioPlayer.addEventListener('loadedmetadata', function() {
             var clipDuration = parseFloat(modeValue);
             var randomStartTime = Math.random() * (audioPlayer.duration - clipDuration);
 
             audioPlayer.currentTime = randomStartTime;
-            resultElement.textContent = "You heard a " + modeLabel + " clip. Now, guess the song!";
+            resultElement.textContent = "now guess";
             audioPlayer.style.display = 'block';  // Display the audio player
 
-            audioPlayer.play();
-
-            audioPlayer.addEventListener('timeupdate', function() {
-                if (audioPlayer.currentTime > randomStartTime + clipDuration) {
+            audioPlayer.play().then(function() {
+                setTimeout(function() {
                     audioPlayer.pause();
                     songSelect.disabled = false;
-                }
+                }, clipDuration * 1000);  // Pause after the clip duration
+            }).catch(function(error) {
+                console.error("Error playing audio:", error);
             });
         });
     }
@@ -125,10 +125,6 @@
         } else {
             resultElement.textContent = "Oops! Your guess is incorrect. Try again.";
         }
-    }
-
-    function resetGame() {
-        location.reload();  // Reload the entire page
     }
 </script>
 
