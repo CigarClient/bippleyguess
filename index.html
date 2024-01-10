@@ -93,16 +93,9 @@
             var randomStartTime = Math.random() * (audioPlayer.duration - clipDuration);
 
             audioPlayer.currentTime = randomStartTime;
+            resultElement.textContent = "You heard a " + modeLabel + " clip. Now, guess the song!";
+            audioPlayer.style.display = 'block';  // Display the audio player
             audioPlayer.play();
-
-            audioPlayer.addEventListener('timeupdate', function() {
-                if (audioPlayer.currentTime > randomStartTime + clipDuration) {
-                    audioPlayer.pause();
-                    songSelect.disabled = false;
-                    resultElement.textContent = "You heard a " + modeLabel + " clip. Now, guess the song!";
-                    audioPlayer.style.display = 'none';  // Hide the audio player after playing the clip
-                }
-            });
         });
     }
 
