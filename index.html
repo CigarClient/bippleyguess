@@ -24,7 +24,15 @@
 <body>
 
 <h1>Guess the Song</h1>
-<p>Listen to a random 2-second clip and guess the song!</p>
+<p>Listen to a random clip and guess the song!</p>
+
+<select id="modeSelect">
+    <option value="0.2">Extreme</option>
+    <option value="0.5">Hard</option>
+    <option value="1">Difficult</option>
+    <option value="2">Normal</option>
+    <option value="60">Extreme Easy</option>
+</select>
 
 <select id="songSelect" disabled>
     <option value="" disabled selected>Please choose a song</option>
@@ -49,11 +57,23 @@
 <script>
     var audioPlayer = document.getElementById('audioPlayer');
     var resultElement = document.getElementById('result');
+    var modeSelect = document.getElementById('modeSelect');
     var songSelect = document.getElementById('songSelect');
     var selectedClip = null;
 
     function playRandomClip() {
         songSelect.disabled = true;
+
+        var modes = {
+            "0.2": "Extreme",
+            "0.5": "Hard",
+            "1": "Difficult",
+            "2": "Normal",
+            "60": "Extreme Easy"
+        };
+
+        var modeValue = modeSelect.value;
+        var modeLabel = modes[modeValue];
 
         var songs = [
             "baltimore.mp3",
@@ -69,17 +89,17 @@
         audioPlayer.src = selectedClip;
 
         audioPlayer.addEventListener('loadedmetadata', function() {
-            var duration = audioPlayer.duration;
-            var randomStartTime = Math.random() * (duration - 2); // Play a 2-second clip from a random start time
+            var clipDuration = parseFloat(modeValue);
+            var randomStartTime = Math.random() * (audioPlayer.duration - clipDuration);
 
             audioPlayer.currentTime = randomStartTime;
             audioPlayer.play();
 
             audioPlayer.addEventListener('timeupdate', function() {
-                if (audioPlayer.currentTime > randomStartTime + 2) {
+                if (audioPlayer.currentTime > randomStartTime + clipDuration) {
                     audioPlayer.pause();
                     songSelect.disabled = false;
-                    resultElement.textContent = "You heard a random clip. Now, guess the song!";
+                    resultElement.textContent = "You heard a " + modeLabel + " clip. Now, guess the song!";
                 }
             });
         });
@@ -98,6 +118,7 @@
     function resetGame() {
         resultElement.textContent = "";
         songSelect.value = "";
+        modeSelect.value = "0.2";
         selectedClip = null;
     }
 </script>
