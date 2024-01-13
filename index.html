@@ -15,8 +15,8 @@
         }
 
         .dark-mode body {
-            background-color: #333;
-            color: #fff;
+            background-color: #1a1a1a; /* Very dark gray background */
+            color: #dddddd; /* Light gray text color */
         }
 
         audio {
@@ -46,7 +46,7 @@
         }
 
         .dark-mode #darkModeToggle {
-            filter: invert(1);
+            filter: invert(0.7); /* Adjusting the dark mode icon color */
         }
     </style>
 </head>
@@ -160,13 +160,13 @@
     }
 
     function updateStyles() {
-        var backgroundColor = isDarkMode ? "#000" : "#fff";
-        var textColor = isDarkMode ? "#fff" : "#000";
+        var backgroundColor = isDarkMode ? "#1a1a1a" : "#fff"; /* Very dark gray background or white */
+        var textColor = isDarkMode ? "#dddddd" : "#000"; /* Light gray text color or black */
 
         document.body.style.backgroundColor = backgroundColor;
         document.body.style.color = textColor;
 
-        darkModeToggle.style.filter = isDarkMode ? "invert(1)" : "none";
+        darkModeToggle.style.filter = isDarkMode ? "invert(0.7)" : "none"; /* Adjusting the dark mode icon color */
     }
 </script>
 
